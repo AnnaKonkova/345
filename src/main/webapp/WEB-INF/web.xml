@@ -22,4 +22,32 @@
     <servlet-name>AddDepartment</servlet-name>
     <servlet-class>servlets.AddDepartment</servlet-class>
   </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RemoveDepartment</servlet-name>
+    <url-pattern>/removeDepartment</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RemoveDepartment</servlet-name>
+    <servlet-class>servlets.RemoveDepartment</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GetAllDepartmentsServlet</servlet-name>
+    <url-pattern>/listD</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>GetAllDepartmentsServlet</servlet-name>
+    <servlet-class>servlets.GetAllDepartmentsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AddNewPatient</servlet-name>
+    <url-pattern>/addPatient</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddNewPatient</servlet-name>
+    <servlet-class>servlets.AddNewPatient</servlet-class>
+  </servlet>
+
 </web-app>

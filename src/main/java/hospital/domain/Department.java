@@ -6,23 +6,25 @@ import java.util.Objects;
 public class Department {
     private Long id;
     private String title;
-    private List<Patient> patients;
+//    private List<Patient> patients;
  /*   private int countOfPatients;*/
 
     public Department(Long id, String title, List<Patient> patients) {
         this.id = id;
         this.title = title;
-        this.patients = patients;
+//        this.patients = patients;
         /*this.countOfPatients=countOfPatients;*/
         /*this.countOfPatients = patients.size();*/
     }
-
-    public Department(String title, List<Patient> patients) {
+    public Department(Long id, String title) {
+        this.id = id;
         this.title = title;
-        this.patients = patients;
-       /* this.countOfPatients=countOfPatients;*/
-       /* this.countOfPatients = patients.size();*/
     }
+
+    public Department(String title) {
+        this.title = title;
+    }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -40,13 +42,6 @@ public class Department {
         this.title = title;
     }
 
-    public List<Patient> getPatients() {
-        return patients;
-    }
-
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
-    }
 /*
     public int getCountOfPatients(){
         return countOfPatients;

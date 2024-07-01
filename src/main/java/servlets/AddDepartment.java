@@ -3,6 +3,7 @@ package servlets;
 import hospital.integration.database.ConnectionManager;
 import hospital.integration.database.DepartmentRepositoryImpl;
 import hospital.service.DepartmentService;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,12 +20,11 @@ public class AddDepartment extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            service.addDepartmentt(request);
-            response.getWriter().println("Отделение успешно добавлено.");
-        }catch ( IOException e) {
-            throw new RuntimeException(e);
-        }
+        String title = request.getParameter("title");
+        service.addDepartmentt(title);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        dispatcher.forward(request, response);
     }
 }
 

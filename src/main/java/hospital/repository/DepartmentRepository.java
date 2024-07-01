@@ -9,14 +9,18 @@ import java.util.List;
 public interface DepartmentRepository {
 
     String findD();
-    List<Department>listD();
+    String listD();
     List<Patient>listP();
-    void addDepartment();
 
-    void removeDepartment( );
+    void addDepartment(Department department);
 
-    void addPatients();
+    Department getDepartmentByTitle(String title);
+
+    void removeDepartmentByTitle(String title);
+
+    void addPatients(Department department, String patientName,int patientAge,String patientGender);
 
     void removePatients( );
 
+    List<Department> getAllDepartments();
 }

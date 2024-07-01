@@ -1,5 +1,7 @@
 package hospital.integration.database;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hospital.domain.Department;
 import hospital.domain.Patient;
 import hospital.repository.DepartmentRepository;
@@ -20,26 +22,38 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public void addDepartment() {
-        System.out.println("Введите название отделения:");
-        String title = scanner.nextLine();
-
-        try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO department_table (title) VALUES (?)");
-            statement.setString(1, title);
-            statement.executeUpdate();
-            statement.close();
-            System.out.println("Отделение успешно созданно.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void addDepartment(Department department) {
+            try {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO department_table (title) VALUES (?)");
+                statement.setString(1, department.getTitle());
+                statement.executeUpdate();
+                statement.close();
+                System.out.println("Отделение успешно созданно.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
-    public void removeDepartment() {
-        System.out.println("Введите название отделения для удаления:");
-        String title = scanner.nextLine();
+    public Department getDepartmentByTitle(String title) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM department_table WHERE title = ?");
+            statement.setString(1, title);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                var dep = new Department(resultSet.getLong("id"), resultSet.getString("title"));
+                resultSet.close();
+                statement.close();
+                return dep;
+            }
+            return null;
 
+        }catch(SQLException e){
+            throw new RuntimeException("Error while statement executing",e);
+        }
+    }
+
+    public void removeDepartmentByTitle(String title) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM department_table WHERE title = ?");
             statement.setString(1, title);
@@ -57,49 +71,43 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public List<Department> listD() {
+    public String listD() {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM department_table");
             List<Department> departments = new ArrayList<>();
+            ObjectMapper mapper = new ObjectMapper();
 
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
                 String title = resultSet.getString("title");
-                Department department = new Department(id, title, null);
+                Department department = new Department(id, title);
                 departments.add(department);
             }
-            return departments;
+            return mapper.writeValueAsString(departments);
+
         } catch (SQLException e) {
             throw new RuntimeException("Error while statement executing");
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void addPatients() {
-        System.out.println("Введите название отделения, в которое добавить пациента: ");
-        String department_title = scanner.nextLine();
+    public void addPatients(Department department, String patientName, int patientAge, String patientGender) {
+        System.out.println("bip ");
+        List<Department> departments = getAllDepartments();
 
-        List<String> departmentNames = getTitleDepartment();
-
-        if (departmentNames.contains(department_title)) {
-            System.out.println("Введите имя пациента:");
-            String fuulName = scanner.nextLine();
-            System.out.println("Введите возрст пациента:");
-            int age = scanner.nextInt();
-            scanner.nextLine();//чтобы прочитать символ новой строки
-            System.out.println("Введите пол пациента(Ж или М):");
-            String gender = scanner.nextLine();
-
+        if (departments.contains(department)) {
             try {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO patient_table (fuulName, age, gender,department_title) VALUES (?, ?, ?, ?)");
-                statement.setString(1, fuulName);
-                statement.setInt(2, age);
-                statement.setString(3, gender);
-                statement.setString(4, department_title);
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO patient_table (patientName, patientAge, patientGender,title) VALUES (?, ?, ?, ?)");
+                statement.setString(1, patientName);
+                statement.setInt(2, patientAge);
+                statement.setString(3, patientGender);
+                statement.setString(4, department.getTitle());
                 /*department.setCountOfPatients(department.getCountOfPatients()+1);*/
                 statement.executeUpdate();
                 statement.close();
-                System.out.println("пациент  успешно добавлен в отделение.");
+                System.out.println("Пациент  успешно добавлен в отделение.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -107,22 +115,21 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
             System.out.println("Отделение не найдено.");
         }
     }
-
-    public List<String> getTitleDepartment() {   //для получения пациента поо отделению
-        List<String> departmentNames = new ArrayList<>();
+    public List<Department> getAllDepartments() {   //для получения пациента поо отделению
+        List<Department> departments = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT title FROM department_table");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM department_table");
             while (resultSet.next()) {
-                String name = resultSet.getString("title");
-                departmentNames.add(name);
+                var dep = new Department(resultSet.getLong("id"), resultSet.getString("title"));
+                departments.add(dep);
             }
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return departmentNames;
+        return departments;
     }
 
     @Override
