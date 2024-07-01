@@ -19,7 +19,7 @@
                         <input name="title" type="text" placeholder="Название отделения"  class="w3-input w3-animate-input w3-border w3-round-large"  style="width: 30%"><br />
                         <input name="patientName" type="text" placeholder=" Имя"  class="w3-input w3-animate-input w3-border w3-round-large"  style="width: 30%"><br />
                         <input name="patientAge" type="number" min="1" max="100" placeholder="Возраст"  class="w3-input w3-animate-input w3-border w3-round-large"  style="width: 30%"><br />
-                        <input name="patientGender" type="text" placeholder="ПОл"  class="w3-input w3-animate-input w3-border w3-round-large"  style="width: 30%"><br />
+                        <input name="patientGender" type="text" placeholder="Пол"  class="w3-input w3-animate-input w3-border w3-round-large"  style="width: 7%"><br />
                         <button type="submit" class="w3-btn w3-green w3-round-large w3-margin-bottom">Добавить</button>
                 </form>
             </div>

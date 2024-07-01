@@ -1,14 +1,3 @@
-<html>
-<h2> Department remove </h2>
-<body>
-<form action="removeDepartment" method="get">
-    <input name="title" type="text" placeholder="Название отделения" required><br>
-    <button type="submit">Удалить</button>
-</form>
-</body>
-</html>
-
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>

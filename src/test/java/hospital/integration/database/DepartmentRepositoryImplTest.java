@@ -33,7 +33,7 @@ class DepartmentRepositoryImplTest {
     void testAddDepartment() {
         // Arrange
         var titleToCreate = "someTitle";
-//        // Act
+        // Act
 
         IllegalArgumentException thrown = assertThrows(
                 IllegalArgumentException.class,
